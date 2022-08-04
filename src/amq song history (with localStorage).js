@@ -5,6 +5,8 @@
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
+// @downloadURL  https://raw.githubusercontent.com/Minigamer42/scripts/master/src/amq%20song%20history%20(with%20localStorage).js
+// @updateURL    https://raw.githubusercontent.com/Minigamer42/scripts/master/src/amq%20song%20history%20(with%20localStorage).js
 // @grant        none
 // ==/UserScript==
 
