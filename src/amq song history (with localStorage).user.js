@@ -49,11 +49,6 @@ function setup() {
         let countshift = quiz.isSpectator ? 0 : 1
         let correctshift = isCorrect ? 1 : 0;
 
-        if (current.count + countshift === 0) {
-            infoDiv.innerHTML = '';
-            return;
-        }
-
         let s = current.count > 1 ? "s" : "";
         let correctRatio = (current.correctCount + correctshift) / (current.count + countshift - current.spectatorCount);
         infoDiv.innerHTML = `Played <b>${current.count + countshift} time${s}</b>`;
