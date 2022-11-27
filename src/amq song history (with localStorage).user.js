@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         AMQ Song History (browser mode)
+// @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
 // @version      1.1
 // @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
