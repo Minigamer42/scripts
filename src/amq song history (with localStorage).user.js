@@ -35,7 +35,13 @@ function setup() {
 
         const songHistory = JSON.parse(localStorage.getItem('songHistory'));
         const current = songHistory[webm] ?? { count: 0, correctCount: 0.0, spectatorCount: 0, lastPlayed: 0 };
-        const isCorrect = quiz.ownGamePlayerId ? data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId)?.correct : data.players[0]?.correct;
+        let isCorrect;
+        if (quiz.gameMode === "Nexus") {
+            isCorrect = data.players[0]?.correct;
+        }
+        else {
+            isCorrect = quiz.isSpectator ? false : data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId)?.correct
+        }
         localStorage.setItem('songHistory', JSON.stringify({
             ...songHistory,
             [webm]: {
@@ -52,7 +58,11 @@ function setup() {
         let s = current.count > 1 ? "s" : "";
         let correctRatio = (current.correctCount + correctshift) / (current.count + countshift - current.spectatorCount);
         infoDiv.innerHTML = `Played <b>${current.count + countshift} time${s}</b>`;
-        infoDiv.innerHTML += `<br>Answer rate: <b>${current.correctCount + correctshift}/${current.count + countshift - current.spectatorCount} (+ ${current.spectatorCount + 1 - countshift} in spec)</b> (${(correctRatio * 100).toFixed(2)}%)`;
+
+        if (current.count + countshift - current.spectatorCount) {
+            infoDiv.innerHTML += `<br>Answer rate: <b>${current.correctCount + correctshift}/${current.count + countshift - current.spectatorCount} (+ ${current.spectatorCount + 1 - countshift} in spec)</b> (${(correctRatio * 100).toFixed(2)}%)`;
+        }
+
         infoDiv.innerHTML += `<br>Last played <b>${timeAgo(current.lastPlayed)}</b>`;
     };
     l.bindListener();
