@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  try to take over the world!
+// @version      1.1
+// @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
 // @downloadURL  https://raw.githubusercontent.com/Minigamer42/scripts/master/src/amq%20song%20history%20(with%20localStorage).js
 // @updateURL    https://raw.githubusercontent.com/Minigamer42/scripts/master/src/amq%20song%20history%20(with%20localStorage).js
 // @grant        none
+// @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqScriptInfo.js
 // ==/UserScript==
 
 const infoDiv = document.createElement('div');
@@ -34,26 +35,31 @@ function setup() {
 
         const songHistory = JSON.parse(localStorage.getItem('songHistory'));
         const current = songHistory[webm] ?? {count: 0, correctCount: 0.0, spectatorCount: 0, lastPlayed: 0};
-        const isCorrect = data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId)?.correct;
+        current.count++;
+        let isCorrect;
+        if (quiz.gameMode === "Nexus") {
+            isCorrect = data.players[0]?.correct;
+        } else {
+            isCorrect = quiz.isSpectator ? false : data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId)?.correct;
+        }
+        current.correctCount += isCorrect;
+        current.spectatorCount += quiz.isSpectator;
         localStorage.setItem('songHistory', JSON.stringify({
             ...songHistory,
             [webm]: {
-                count: current.count + 1,
-                correctCount: +isCorrect + current.correctCount,
-                spectatorCount: +quiz.isSpectator + current.spectatorCount,
+                count: current.count,
+                correctCount: current.correctCount,
+                spectatorCount: current.spectatorCount,
                 lastPlayed: Date.now()
             }
         }));
 
-        if (current.count === 0) {
-            infoDiv.innerHTML = '';
-            return;
-        }
-
         let s = current.count > 1 ? "s" : "";
         let correctRatio = current.correctCount / (current.count - current.spectatorCount);
-        infoDiv.innerHTML = `Played <b>${current.count} time${s}</b>`;
-        infoDiv.innerHTML += `<br>Previous answer rate: <b>${current.correctCount}/${current.count} (+ ${current.spectatorCount} in spec)</b> (${(correctRatio * 100).toFixed(2)}%)`;
+        infoDiv.innerHTML = `Played <b>${current.count} time${s} (${current.spectatorCount} in spec)</b>`;
+        if (current.count - current.spectatorCount) {
+            infoDiv.innerHTML += `<br>Answer rate: <b>${current.correctCount}/${current.count - current.spectatorCount}</b> (${(correctRatio * 100).toFixed(2)}%)`;
+        }
         infoDiv.innerHTML += `<br>Last played <b>${timeAgo(current.lastPlayed)}</b>`;
     };
     l.bindListener();
@@ -116,3 +122,11 @@ function timeAgo(time) {
     }
     return time;
 }
+
+AMQ_addScriptData({
+    name: "Song History",
+    author: "Minigamer42",
+    description: `<p>-- Browser Mode --<p>
+    <p>Display the number of time a song played before and your guess rate on it in the song info window</p>
+            <p><a href="https://github.com/Minigamer42/scripts/raw/master/src/amq%20song%20history%20(with%20localStorage).user.js" target="_blank">Click this link</a> to update it.</p>`
+});
