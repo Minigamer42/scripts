@@ -5,6 +5,8 @@
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
+// @updateUrl    https://github.com/Minigamer42/scripts/raw/master/src/mute%20amq%20sound%20for%20x%20seconds.user.js
+// @downloadUrl  https://github.com/Minigamer42/scripts/raw/master/src/mute%20amq%20sound%20for%20x%20seconds.user.js
 // @grant        none
 // ==/UserScript==
 
