@@ -50,7 +50,7 @@ function sendChatMessage(message, force) {
 
 const oldAdjustVolume = VolumeController.prototype.adjustVolume;
 VolumeController.prototype.adjustVolume = function () {
-    if (!this.muted && muted) {
+    if (!this.muted && muted && !quiz.isSpectator) {
         setTime(time + 2);
         sendChatMessage(`Player unmuted.` + (tour ? ` Current unmuted time set to ${time}s` : ''), true);
         muted = false;
@@ -106,10 +106,10 @@ function setup() {
     answerResultsListener.bindListener();
 
     const playNextSongListener = new Listener('play next song', () => {
-        if (time < 0) return;
-
         clearTimeout(timeout);
         muted = false;
+        if (time < 0) return;
+
         volumeController.setMuted(false);
         volumeController.adjustVolume();
 
@@ -149,7 +149,9 @@ function setup() {
 
     const gameStartingListener = new Listener('quiz over', () => {
         time = standardTime;
-        sendChatMessage(`Enabled Stunar Mode with settings: ${time}s unmuted, ${max}s max`, true);
+        if (time > 0) {
+            sendChatMessage(`Enabled Stunar Mode with settings: ${time}s unmuted, ${max}s max`, true);
+        }
     });
     gameStartingListener.bindListener();
 
