@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Mute Button Buzzer / Stunar Edition
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -62,7 +62,7 @@ function setup() {
     const answerResultsListener = new Listener('answer results', payload => {
         if (!tour || time <= 0) return;
 
-        const selfCorrect = payload.players[quiz.ownGamePlayerId].correct;
+        const selfCorrect = payload.players.find(player => +player.gamePlayerId === +quiz.ownGamePlayerId).correct;
 
         for (const {gamePlayerId, correct} of payload.players) {
             // ignore self
