@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Mute Button Buzzer / Stunar Edition
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -202,7 +202,7 @@ function setup() {
                             sendChatMessage('Disabled Stunar Mode', true);
                         }
                         tour = false;
-                        time = args[1] ? +args[1] : -1;
+                        setTime(args[1] ?? -1, true);
                     }
                     event.target.value = "";
                     event.preventDefault();
