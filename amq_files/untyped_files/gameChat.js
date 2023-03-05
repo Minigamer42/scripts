@@ -1148,7 +1148,7 @@ GameChat.prototype.getTeamChatToggleSwitchActive = function () {
 	return !this.$teamChatSwitchContainer.hasClass("hide");
 };
 
-GameChat.prototype.setPlayerOnlyMode = function (on: boolean) {
+GameChat.prototype.setPlayerOnlyMode = function (on) {
 	this.playerOnlyMode = on;
 	if (on) {
 		this.$PLAYER_ONLY_MESSAGE.removeClass("hide");
