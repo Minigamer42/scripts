@@ -1,2 +1,4 @@
 node_modules/**
 .idea/**
+/amq_files/samples/listener/*.json
+/src/test.js
