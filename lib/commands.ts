@@ -12,7 +12,12 @@ if (gameChatInput) {
             return;
         }
         const args = (event.target as HTMLInputElement).value.trim().split(/\s+/);
-        const cmd = args.shift().substring(1);
+        let cmd = args.shift();
+        const slash = cmd.substring(0, 1);
+        if (slash !== '/') {
+            return;
+        }
+        cmd = cmd.substring(1);
         if (!(cmd in commands)) {
             // @ts-ignore
             gameChat.systemMessage(`command /${cmd} not found`);
@@ -20,6 +25,7 @@ if (gameChatInput) {
         }
         event.preventDefault();
         commands[cmd]['callback'](...args);
+        (event.target as HTMLInputElement).value = '';
     });
 }
 
