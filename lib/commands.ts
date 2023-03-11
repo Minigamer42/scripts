@@ -26,3 +26,15 @@ if (gameChatInput) {
 var AMQ_addCommand = function ({command, callback, description}: typeof commands[string]) {
     commands[command] = {command, callback, description};
 };
+
+AMQ_addCommand({
+    command: 'help',
+    callback: () => {
+        for (const commandKey in commands) {
+            const command = commands[commandKey];
+            // @ts-ignore
+            gameChat.systemMessage(`/${command.command}: ${command.description}`);
+        }
+    },
+    'description': 'Displays this help'
+});
