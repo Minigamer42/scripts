@@ -8,7 +8,7 @@ const commands: {
 const gameChatInput = document.getElementById('gcInput');
 if (gameChatInput) {
     gameChatInput.addEventListener('keydown', event => {
-        if (event.key !== 'Enter' || !(event.target instanceof HTMLInputElement)) {
+        if (event.key !== 'Enter' || !(event.target instanceof HTMLTextAreaElement)) {
             return;
         }
         const args = event.target.value.trim().split(/\s+/);
