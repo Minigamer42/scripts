@@ -8,24 +8,28 @@ const commands: {
 const gameChatInput = document.getElementById('gcInput');
 if (gameChatInput) {
     gameChatInput.addEventListener('keydown', event => {
-        if (event.key !== 'Enter') {
+        if (event.key !== 'Enter' || !(event.target instanceof HTMLInputElement)) {
             return;
         }
-        const args = (event.target as HTMLInputElement).value.trim().split(/\s+/);
+        const args = event.target.value.trim().split(/\s+/);
         let cmd = args.shift();
-        const slash = cmd.substring(0, 1);
-        if (slash !== '/') {
+        if (cmd.substring(0, 1) !== '/') {
+            return;
+        } else if (cmd.substring(0, 2) === '//') {
+            event.target.value = cmd.substring(1);
             return;
         }
+
         cmd = cmd.substring(1);
         if (!(cmd in commands)) {
             // @ts-ignore
             gameChat.systemMessage(`command /${cmd} not found`);
             return;
         }
+
         event.preventDefault();
         commands[cmd]['callback'](...args);
-        (event.target as HTMLInputElement).value = '';
+        event.target.value = '';
     });
 }
 
@@ -36,6 +40,10 @@ var AMQ_addCommand = function ({command, callback, description}: typeof commands
 AMQ_addCommand({
     command: 'help',
     callback: () => {
+        // @ts-ignore
+        gameChat.systemMessage('Command overview:');
+        // @ts-ignore
+        gameChat.systemMessage('//<command>: send /<command>');
         for (const commandKey in commands) {
             const command = commands[commandKey];
             // @ts-ignore
