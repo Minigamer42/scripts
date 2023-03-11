@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Command Invite
-// @version      0.1
+// @version      0.2
 // @description  Adds a command to invite people to your Lobby
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
