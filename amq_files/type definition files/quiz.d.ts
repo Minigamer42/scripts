@@ -92,79 +92,79 @@ declare class Quiz {
     public teamMode: boolean;
     public champGame: boolean;
     public avatarSlotMap: any[];
-    public currentAbilityTargetClickHandler: (target) => void;
-    public currentAbilityMouseMoveHandler: (event) => void;
+    public currentAbilityTargetClickHandler: (target: any) => void;
+    public currentAbilityMouseMoveHandler: (event: any) => void;
     public currentAbilityTargetClearHandler: () => void;
     public $currentAbilityTargetIcon: any;
 
     constructor();
 
     private _groupSlotMap: {};
-    get groupSlotMap();
-    set groupSlotMap(newMap);
+    get groupSlotMap(): any;
+    set groupSlotMap(newMap: any);
 
-    get ownGroupSlot();
+    get ownGroupSlot(): any;
 
-    openView(callback);
+    openView(callback: any): any;
 
-    closeView(args);
+    closeView(args: any): any;
 
     setupQuiz(
-        players,
-        isSpectator,
-        quizState,
-        settings,
-        isHost,
-        groupSlotMap,
-        soloMode,
-        teamAnswers,
-        selfAnswer,
-        champGame,
-        enemies,
-        avatarAssets
-    );
+        players: any,
+        isSpectator: boolean,
+        quizState: any,
+        settings: any,
+        isHost: boolean,
+        groupSlotMap: any,
+        soloMode: any,
+        teamAnswers: any,
+        selfAnswer: any,
+        champGame: boolean,
+        enemies: any,
+        avatarAssets: any
+    ): void;
 
-    setInputInFocus(inFocus);
+    setInputInFocus(inFocus: any): any;
 
-    skipClicked();
+    skipClicked(): any;
 
-    promoteHost(newHostName: string);
+    promoteHost(newHostName: string): any;
 
-    leave();
+    leave(): any;
 
-    viewSettings();
+    viewSettings(): any;
 
-    videoReady(songId);
+    videoReady(songId: any): any;
 
-    startReturnLobbyVote();
+    startReturnLobbyVote(): any;
 
-    selectAvatarGroup(number: number);
+    selectAvatarGroup(number: number): any;
 
-    handleAutoHide(type: 1 | 2 | 3, watched: boolean, highRisk: boolean);
+    handleAutoHide(type: 1 | 2 | 3, watched: boolean, highRisk: boolean): any;
 
-    handlePlayerOnlyChatPoint(on: boolean) ;
+    handlePlayerOnlyChatPoint(on: boolean): any;
 
-    handleNoEmotePoint(on: boolean);
+    handleNoEmotePoint(on: boolean): any;
 
-    addLateJoinPlayer(player: { name: any; level: any; gamePlayerId: number; host: any; avatarInfo: any; points: any; inGame: boolean; positionSlot: any; teamPlayer: any; teamNumber: any; hidden: any; });
+    addLateJoinPlayer(player: { name: any; level: any; gamePlayerId: number; host: any; avatarInfo: any; points: any; inGame: boolean; positionSlot: any; teamPlayer: any; teamNumber: any; hidden: any; }): any;
 
     updateEnemyTarget(targetPosition: string | number,
-        targetPlayer: { gamePlayerId: number; setNexusTurn: (arg0: boolean) => void; targetIcon: any; });
+        targetPlayer: { gamePlayerId: number; setNexusTurn: (arg0: boolean) => void; targetIcon: any; }): any;
 
     handleNexusEvent(event: { type: any; target: { type: string; identifier: string | number; dodged: any; crit: any; hp: any; shield: any; name: any; targetType: any; slot: any; }; dmg: any; attackEffectSet: any; displayZero: any; targetType: string; slot: string | number; newHp: any; amount: any; targetName: any; state: { position: string | number; defeated: any; targetSlot: string | number; slot: string | number; }; targetInfo: { position: string | number; lastTargetSlot: string | number; attackTimer: any; targetSlot: string | number; }; currentAvatar: string | number; attackTarget: string | number; nextAvatar: string | number; slots: any[]; targetPosition: string | number; targetId: string | number; newState: any; name: any; currentCooldown: any; buffInfo: any; hp: any; shield: any; change: any; assetName: any; action: any; events: any[]; skipDelay: any; delay: any; iconType: string; iconName: any; genreIds: any; seasonId: any; songInfo: any; sfxInfo: { sfx: any; sfxTimeingMs: any; }; },
-        finishedCallback);
+        finishedCallback: any): any;
 
-    getNexusTarget(targetType: string, slot: string | number);
+    getNexusTarget(targetType: string, slot: string | number): any;
 
-    sortNexusEvents(events: any[]);
+    sortNexusEvents(events: any[]): any;
 
-    updateSwapTarget(slotOne, slotTwo);
+    updateSwapTarget(slotOne: any, slotTwo: any): any;
 
-    clearSwapIcons();
+    clearSwapIcons(): any;
 
-    displayAbilityTarget($targetIcon, ability, mouseX, mouseY);
+    displayAbilityTarget($targetIcon: any, ability: any, mouseX: any, mouseY: any): any;
 
-    clearAbilityTarget();
+    clearAbilityTarget(): any;
 
-    handleNewNexusCharacterClick(quizPlayer);
+    handleNewNexusCharacterClick(quizPlayer: any): any;
 }

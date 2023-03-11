@@ -1,4 +1,6 @@
-node_modules/**
-.idea/**
+/node_modules/**
+/.idea/**
 /amq_files/samples/listener/*.json
-/src/test.js
+/src/test/**
+/amq_files/helper files/global.js
+/amq_files/helper files/global.d.ts

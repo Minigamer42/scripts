@@ -1,16 +1,21 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true,
+    "target": "ES6",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": [
       "ES2020",
       "DOM"
-    ]
+    ],
+    "strict": true,
+    "declaration": true
   },
-  "exclude": [
-    "node_modules"
+  "include": [
+    "./lib/",
+    "./amq_files/helper files/",
+    "./amq_files/helper files/global",
+    "./amq_files/type definition files/",
+    "./src/test/"
   ]
 }
