@@ -20,16 +20,17 @@ if (gameChatInput) {
             return;
         }
 
+        event.preventDefault();
+        event.target.value = '';
+
         cmd = cmd.substring(1);
         if (!(cmd in commands)) {
             // @ts-ignore
-            gameChat.systemMessage(`command /${cmd} not found`);
+            gameChat.systemMessage(`command /${cmd} not found. Send //${cmd} to send the literal string instead.`);
             return;
         }
 
-        event.preventDefault();
         commands[cmd]['callback'](...args);
-        event.target.value = '';
     });
 }
 
@@ -43,7 +44,7 @@ AMQ_addCommand({
         // @ts-ignore
         gameChat.systemMessage('Command overview:');
         // @ts-ignore
-        gameChat.systemMessage('//<command>: send /<command>');
+        gameChat.systemMessage('//&lt;command&gt;: send literal \'/&lt;command&gt;\'');
         for (const commandKey in commands) {
             const command = commands[commandKey];
             // @ts-ignore
