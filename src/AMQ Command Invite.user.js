@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Command Invite
-// @version      0.3
+// @version      0.4
 // @description  Adds a command to invite people to your Lobby
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -39,18 +39,18 @@
     new Listener('Spectate Game', startTracking).bindListener();
     new Listener('Join Game', startTracking).bindListener();
 
-    function invitePlayer(playerToInvite) {
-        if (userList.has(playerToInvite.toLowerCase())) {
+    function invitePlayer(player) {
+        if (userList.has(player.toLowerCase())) {
             socket.sendCommand({
                 type: 'social',
                 command: 'invite to game',
                 data: {
-                    target: userList.get(playerToInvite.toLowerCase())
+                    target: userList.get(player.toLowerCase())
                 }
             });
-            gameChat.systemMessage(`Invited '${playerToInvite}' to your lobby.`);
+            gameChat.systemMessage(`Invited '${player}' to your lobby.`);
         } else {
-            gameChat.systemMessage(`Player '${playerToInvite}' is not online.`);
+            gameChat.systemMessage(`Player '${player}' is not online.`);
         }
     }
 

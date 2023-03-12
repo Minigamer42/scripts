@@ -67,7 +67,7 @@ if (!window.commandHandlerCommands) {
                 }, []);
 
                 // @ts-ignore
-                gameChat.systemMessage(`/${command.command}${args.length > 0 ? ` (${args.join(', ')})` : ''}: ${command.description}`);
+                gameChat.systemMessage(`/${command.command}${args.length > 0 ? ` ${args.join(', ')}` : ''}: ${command.description}`);
             }
         }
 
