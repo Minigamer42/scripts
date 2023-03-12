@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Command Invite
-// @version      0.2
+// @name         AMQ Command Invite
+// @version      0.3
 // @description  Adds a command to invite people to your Lobby
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -8,7 +8,6 @@
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // @grant        none
 // ==/UserScript==
-
 (function () {
     'use strict';
 
