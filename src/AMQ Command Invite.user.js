@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Command Invite
-// @version      0.4
+// @version      0.5
 // @description  Adds a command to invite people to your Lobby
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -48,7 +48,7 @@
                     target: userList.get(player.toLowerCase())
                 }
             });
-            gameChat.systemMessage(`Invited '${player}' to your lobby.`);
+            gameChat.systemMessage(`Invited '${userList.get(player.toLowerCase())}' to your lobby.`);
         } else {
             gameChat.systemMessage(`Player '${player}' is not online.`);
         }
