@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         AMQ Mute Button Buzzer / Stunar Edition
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
 // @updateUrl    https://github.com/Minigamer42/scripts/raw/master/src/AMQ%20Mute%20Button%20Buzzer%20-%20Stunar%20Edition.user.js
 // @downloadUrl  https://github.com/Minigamer42/scripts/raw/master/src/AMQ%20Mute%20Button%20Buzzer%20-%20Stunar%20Edition.user.js
+// @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // @grant        none
 // ==/UserScript==
 
 const answerInput = document.getElementById('qpAnswerInput');
-const command = 'mb';
 let standardTime = -1;
 let time = -1;
 let max = 5;
@@ -27,7 +27,6 @@ function setTime(newTime, standard) {
     } else if (time > max) {
         time = max;
     }
-    time = +time;
     if (standard) {
         standardTime = time;
     }
@@ -108,7 +107,7 @@ function setup() {
     const playNextSongListener = new Listener('play next song', () => {
         clearTimeout(timeout);
         muted = false;
-        if (time < 0) return;
+        if (time <= 0) return;
 
         volumeController.setMuted(false);
         volumeController.adjustVolume();
@@ -155,60 +154,67 @@ function setup() {
     });
     gameStartingListener.bindListener();
 
-    const gameChatInput = document.getElementById("gcInput");
-    gameChatInput.addEventListener("keydown", event => {
-        if (event.key === 'Enter') {
-            const str = event.target.value;
-            if (str.startsWith("/")) {
-                const args = str.substring(1).trim().split(/\s+/);
-                const cmd = args.shift();
-                if (cmd === 'mb') {
-                    if (args[0] === 'stunar' || args[0] === 'tour') {
-                        let success = false;
-                        let newTime;
-                        let newMax;
-                        if (args[1] < 0) {
-                            gameChat.systemMessage(`Please set the first parameter to a value > 0.`);
-                        } else if (args[1]) {
-                            if (args[2] && args[2] < args[1]) {
-                                gameChat.systemMessage(`Please enter a max value above your starting value.`);
-                            } else {
-                                success = true;
-                                newTime = args[1];
-                                if (args[2]) {
-                                    newMax = parseInt(args[2]);
-                                }
-                            }
-                        } else {
-                            success = true;
-                            newTime = 3;
-                        }
-                        if (success) {
-                            tour = true;
-                            if (newTime) {
-                                setTime(newTime, true);
-                            }
-                            if (newMax) {
-                                max = newMax;
-                            }
-                            sendChatMessage(`Enabled Stunar Mode with settings: ${time}s unmuted, ${max}s max`, true);
-                        }
-                    } else if (args[0] === 'verbose') {
-                        verbose = !verbose;
-                        gameChat.systemMessage('Verbose mode ' + (verbose ? 'enabled' : 'disabled'));
-                        sendChatMessage('Verbose mode enabled');
+    /**
+     *
+     * @param command {string | undefined}
+     * @param min {string}
+     * @param max {string}
+     */
+    function muteButtonConfig(command = undefined, min = '3', max = '5') {
+        switch (command) {
+            case 'tour':
+            case 'stunar':
+                let success = false;
+                let newTime;
+                let newMax;
+                if (min <= 0) {
+                    gameChat.systemMessage(`Please set the first parameter to a value > 0.`);
+                } else {
+                    if (max < min) {
+                        gameChat.systemMessage(`Please enter a max value above your starting value.`);
                     } else {
-                        if (tour) {
-                            sendChatMessage('Disabled Stunar Mode', true);
-                        }
-                        tour = false;
-                        setTime(args[1] ?? -1, true);
+                        success = true;
+                        newTime = parseInt(min);
+                        newMax = parseInt(max);
                     }
-                    event.target.value = "";
-                    event.preventDefault();
                 }
-            }
+                if (success) {
+                    tour = true;
+                    if (newTime) {
+                        setTime(newTime, true);
+                    }
+                    if (newMax) {
+                        max = newMax;
+                    }
+                    sendChatMessage(`Enabled Stunar Mode with settings: ${time}s unmuted, ${max}s max`, true);
+                }
+                break;
+            case 'verbose':
+                verbose = !verbose;
+                if (verbose) {
+                    sendChatMessage('Verbose mode enabled');
+                } else {
+                    gameChat.systemMessage('Verbose mode disabled');
+                }
+                break;
+            default:
+                if (command) {
+                    gameChat.systemMessage('Supported commands: stunar/tour, verbose');
+                } else {
+                    if (tour) {
+                        sendChatMessage('Disabled Stunar Mode', true);
+                    }
+                    tour = false;
+                    setTime(min, true);
+                }
+                break;
         }
+    }
+
+    AMQ_addCommand({
+        command: 'mb',
+        callback: muteButtonConfig,
+        description: 'Mute Button Config. Default is 3s default mute time and 5s max'
     });
 }
 
