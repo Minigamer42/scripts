@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         AMQ Auto Answer
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       mshift20
 // @match        https://animemusicquiz.com/
 // @icon         https://www.google.com/s2/favicons?domain=animemusicquiz.com
 // @updateUrl    https://github.com/Minigamer42/scripts/blob/master/src/autoanswer.user.js
 // @downloadUrl  https://github.com/Minigamer42/scripts/blob/master/src/autoanswer.user.js
+// @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // @grant        none
 // ==/UserScript==
 
@@ -34,20 +35,14 @@
         }
     });
 
-    document.getElementById("gcInput").addEventListener('keydown', (event) => {
-        const commandPrefix = '/';
+    function toggleAutoanswer() {
+        enabled = !enabled;
+        gameChat.systemMessage(`Autoanswer ${enabled ? 'enabled' : 'disabled'}`);
+    }
 
-        if (event.which !== 13) return;
-        if (!event.target.value.trim().startsWith(commandPrefix)) return;
-
-        const args = event.target.value.trim().split(/\s+/);
-        const command = args[0].substring(commandPrefix.length);
-
-        if (command === 'autoanswer') {
-            event.preventDefault();
-            event.target.value = '';
-
-            enabled = !enabled;
-        }
+    AMQ_addCommand({
+        command: 'autoanswer',
+        callback: toggleAutoanswer,
+        description: 'Toggle Autoanswer'
     });
 })();
