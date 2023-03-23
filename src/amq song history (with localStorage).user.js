@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -9,6 +9,7 @@
 // @updateURL    https://raw.githubusercontent.com/Minigamer42/scripts/master/src/amq%20song%20history%20(with%20localStorage).js
 // @grant        none
 // @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqScriptInfo.js
+// @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // ==/UserScript==
 
 const infoDiv = document.createElement('div');
@@ -19,6 +20,64 @@ if (window.quiz) {
 }
 
 function setup() {
+    function timeAgo(time) {
+        if (time === 0) {
+            return 'never';
+        }
+        switch (typeof time) {
+            case 'number':
+                break;
+            case 'string':
+                time = +new Date(time);
+                break;
+            case 'object':
+                if (time.constructor === Date) time = time.getTime();
+                break;
+            default:
+                time = +new Date();
+        }
+        const time_formats = [
+            [60, 'seconds', 1], // 60
+            [120, '1 minute ago', '1 minute from now'], // 60*2
+            [3600, 'minutes', 60], // 60*60, 60
+            [7200, '1 hour ago', '1 hour from now'], // 60*60*2
+            [86400, 'hours', 3600], // 60*60*24, 60*60
+            [172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+            [604800, 'days', 86400], // 60*60*24*7, 60*60*24
+            [1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+            [2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+            [4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+            [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+            [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+            [2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+            [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
+            [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
+        ];
+        let seconds = (+new Date() - time) / 1000,
+            token = 'ago',
+            list_choice = 1;
+
+        if (seconds === 0) {
+            return 'Just now';
+        }
+        if (seconds < 0) {
+            seconds = Math.abs(seconds);
+            token = 'from now';
+            list_choice = 2;
+        }
+        let i = 0, format;
+        while (format = time_formats[i++]) {
+            if (seconds < format[0]) {
+                if (typeof format[2] == 'string') {
+                    return format[list_choice];
+                } else {
+                    return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+                }
+            }
+        }
+        return time;
+    }
+
     let boxDiv = document.querySelector('div.qpSideContainer > div.row').parentElement;
     boxDiv.insertBefore(infoDiv, boxDiv.children[4]);
 
@@ -63,70 +122,47 @@ function setup() {
         infoDiv.innerHTML += `<br>Last played <b>${timeAgo(current.lastPlayed)}</b>`;
     };
     l.bindListener();
-}
 
-function timeAgo(time) {
-    if (time === 0) {
-        return 'never';
-    }
-    switch (typeof time) {
-        case 'number':
-            break;
-        case 'string':
-            time = +new Date(time);
-            break;
-        case 'object':
-            if (time.constructor === Date) time = time.getTime();
-            break;
-        default:
-            time = +new Date();
-    }
-    const time_formats = [
-        [60, 'seconds', 1], // 60
-        [120, '1 minute ago', '1 minute from now'], // 60*2
-        [3600, 'minutes', 60], // 60*60, 60
-        [7200, '1 hour ago', '1 hour from now'], // 60*60*2
-        [86400, 'hours', 3600], // 60*60*24, 60*60
-        [172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
-        [604800, 'days', 86400], // 60*60*24*7, 60*60*24
-        [1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
-        [2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
-        [4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
-        [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
-        [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
-        [2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
-        [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
-        [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
-    ];
-    let seconds = (+new Date() - time) / 1000,
-        token = 'ago',
-        list_choice = 1;
+    /**
+     * @param limit {string}
+     * @param start {string}
+     */
+    function displaySongHistory(limit = '10', start = '1') {
+        const songsPlayed = [];
+        const songs = JSON.parse(localStorage.songHistory);
 
-    if (seconds === 0) {
-        return 'Just now';
-    }
-    if (seconds < 0) {
-        seconds = Math.abs(seconds);
-        token = 'from now';
-        list_choice = 2;
-    }
-    let i = 0, format;
-    while (format = time_formats[i++]) {
-        if (seconds < format[0]) {
-            if (typeof format[2] == 'string') {
-                return format[list_choice];
-            } else {
-                return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
-            }
+        for (const url in songs) {
+            songs[url]['url'] = url;
+            songsPlayed.push(songs[url]);
+        }
+        songsPlayed.sort((songA, songB) => songB.count - songA.count);
+        if (songsPlayed.count < limit) {
+            limit = `${songsPlayed.count}`;
+        }
+        if (start < 1) {
+            start = '1';
+        }
+
+        gameChat.systemMessage(`List of songs played (${start} - ${parseInt(limit) + parseInt(start) - 1}):`);
+        for (let i = parseInt(start) - 1; i < parseInt(limit) + parseInt(start) - 1; i++) {
+            /** @type {{count: number, correctCount: number, spectatorCount: number, lastPlayed: number, url: string}} */
+            const song = songsPlayed[i];
+            gameChat.systemMessage(`<a href='https://files.catbox.moe/${song.url}.webm' target='_blank'>https://files.catbox.moe/${song.url}.webm</a>: ${song.count} (${song.correctCount}/${song.count - song.spectatorCount})`);
         }
     }
-    return time;
-}
 
-AMQ_addScriptData({
-    name: "Song History",
-    author: "Minigamer42",
-    description: `<p>-- Browser Mode --<p>
+
+    AMQ_addScriptData({
+        name: "Song History",
+        author: "Minigamer42",
+        description: `<p>-- Browser Mode --<p>
     <p>Display the number of time a song played before and your guess rate on it in the song info window</p>
             <p><a href="https://github.com/Minigamer42/scripts/raw/master/src/amq%20song%20history%20(with%20localStorage).user.js" target="_blank">Click this link</a> to update it.</p>`
-});
+    });
+
+    AMQ_addCommand({
+        command: 'songhistory',
+        callback: displaySongHistory,
+        description: 'Display song history ordered by count descending. Parameters default to 10 and 1'
+    });
+}
