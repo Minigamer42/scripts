@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Auto Answer
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       mshift20
 // @match        https://animemusicquiz.com/

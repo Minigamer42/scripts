@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Mute Button Buzzer / Stunar Edition
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*

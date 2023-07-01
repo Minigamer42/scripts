@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Mute sound for x seconds
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*

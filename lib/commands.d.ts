@@ -1,4 +1,4 @@
-interface Window {
+interface Document {
     commandHandlerCommands: {
         [command: string]: {
             command: string;
@@ -7,4 +7,4 @@ interface Window {
         };
     };
 }
-declare function AMQ_addCommand({ command, callback, description }: typeof window.commandHandlerCommands[string]): void;
+declare function AMQ_addCommand({ command, callback, description }: typeof document.commandHandlerCommands[string]): void;

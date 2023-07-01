@@ -1,4 +1,4 @@
-interface Window {
+interface Document {
     commandHandlerCommands: {
         [command: string]: {
             command: string;
@@ -8,14 +8,14 @@ interface Window {
     };
 }
 
-function AMQ_addCommand({command, callback, description}: typeof window.commandHandlerCommands[string]) {
-    window.commandHandlerCommands[command] = {command, callback, description};
+function AMQ_addCommand({command, callback, description}: typeof document.commandHandlerCommands[string]) {
+    document.commandHandlerCommands[command] = {command, callback, description};
 }
 
-if (!window.commandHandlerCommands) {
+if (!document.commandHandlerCommands) {
     const gameChatInput = document.getElementById('gcInput');
     if (gameChatInput) {
-        window.commandHandlerCommands = {};
+        document.commandHandlerCommands = {};
         gameChatInput.addEventListener('keydown', event => {
             if (event.key !== 'Enter' || !(event.target instanceof HTMLTextAreaElement)) {
                 return;
@@ -30,7 +30,7 @@ if (!window.commandHandlerCommands) {
             }
 
             cmd = cmd.substring(1);
-            if (!(cmd in window.commandHandlerCommands)) {
+            if (!(cmd in document.commandHandlerCommands)) {
                 // @ts-ignore
                 // gameChat.systemMessage(`command /${cmd} not found. Send //${cmd} to send the literal string instead.`);
                 return;
@@ -38,7 +38,7 @@ if (!window.commandHandlerCommands) {
 
             event.preventDefault();
             event.target.value = '';
-            window.commandHandlerCommands[cmd]['callback'](...args);
+            document.commandHandlerCommands[cmd]['callback'](...args);
         });
 
         function getArgs(func: (...args: any[]) => void) {
@@ -58,8 +58,8 @@ if (!window.commandHandlerCommands) {
             gameChat.systemMessage('Command overview:');
             // @ts-ignore
             gameChat.systemMessage('//&lt;command&gt;: send literal \'/&lt;command&gt;\'');
-            for (const commandKey in window.commandHandlerCommands) {
-                const command = window.commandHandlerCommands[commandKey];
+            for (const commandKey in document.commandHandlerCommands) {
+                const command = document.commandHandlerCommands[commandKey];
 
                 const args = getArgs(command.callback).reduce((initial: string[], current) => {
                     initial.push(`&lt;${current}&gt;`);
@@ -76,6 +76,5 @@ if (!window.commandHandlerCommands) {
             callback: sendHelp,
             'description': 'Displays this help'
         });
-
     }
 }
