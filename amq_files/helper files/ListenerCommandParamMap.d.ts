@@ -515,7 +515,7 @@ declare type SongInfo = {
     animeNames: AnimeNames;
     artist: string;
     songName: string;
-    urlMap: Map2;
+    videoTargetMap: Map2;
     type: number;
     typeNumber: number;
     annId: number;

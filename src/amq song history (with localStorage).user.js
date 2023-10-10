@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.2
 // @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -86,7 +86,7 @@ function setup() {
     }
     const l = new Listener("answer results");
     l.callback = async (data) => {
-        const webm = data.songInfo.urlMap?.catbox?.[720]?.match(/https:\/\/files\.catbox\.moe\/(\w{6})/)?.[1] ?? data.songInfo.urlMap?.catbox?.[480]?.match(/https:\/\/files\.catbox\.moe\/(\w{6})/)?.[1];
+        const webm = data.songInfo.videoTargetMap?.catbox?.[720]?.slice(0, 6) ?? data.songInfo.videoTargetMap?.catbox?.[480]?.slice(0, 6);
         if (!webm) {
             infoDiv.innerHTML = '';
             return;
@@ -139,7 +139,7 @@ function setup() {
         if (songsPlayed.count < limit) {
             limit = `${songsPlayed.count}`;
         }
-        if (start < 1) {
+        if (start <= 0) {
             start = '1';
         }
 
