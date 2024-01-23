@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ New Game Mode UI Sonic Heroes
 // @namespace    https://github.com/Minigamer42
-// @version      0.21
+// @version      0.22
 // @description  Adds a user interface to new game mode to keep track of guesses
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
