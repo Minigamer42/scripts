@@ -6,8 +6,8 @@
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
 // @grant        none
-// @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqScriptInfo.js
-// @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqWindows.js
+// @require      https://github.com/joske2865/AMQ-Scripts/raw/master/common/amqScriptInfo.js
+// @require      https://github.com/joske2865/AMQ-Scripts/raw/master/common/amqWindows.js
 // @require      https://github.com/amq-script-project/AMQ-Scripts/raw/master/gameplay/amqAnswerTimesUtility.user.js
 // @downloadURL  https://github.com/Minigamer42/scripts/raw/master/src/amqNewGameModeUISonicHeroes.user.js
 // @updateURL  https://github.com/Minigamer42/scripts/raw/master/src/amqNewGameModeUISonicHeroes.user.js
