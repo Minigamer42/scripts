@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
-// @version      1.5
+// @version      1.6
 // @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -12,8 +12,10 @@
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // ==/UserScript==
 
+const version = "1.6";
 const infoDiv = document.createElement('div');
 infoDiv.className = "rowPlayCount";
+infoDiv.style.marginBottom = "10px";
 
 if (window.quiz) {
     setup();
@@ -119,7 +121,7 @@ function setup() {
         if (current.count - current.spectatorCount) {
             infoDiv.innerHTML += `<br>Answer rate: <b>${current.correctCount}/${current.count - current.spectatorCount}</b> (${(correctRatio * 100).toFixed(2)}%)`;
         }
-        infoDiv.innerHTML += `<br>Last played <b>${timeAgo(current.lastPlayed)}</b>`;
+        infoDiv.innerHTML += `<br>Last played: <b>${timeAgo(current.lastPlayed)}</b>`;
     };
     l.bindListener();
 
@@ -155,6 +157,8 @@ function setup() {
     AMQ_addScriptData({
         name: "Song History",
         author: "Minigamer42",
+        version: version,
+        link: "https://github.com/Minigamer42/scripts/raw/master/src/amq%20song%20history%20(with%20localStorage).user.js",
         description: `<p>-- Browser Mode --<p>
     <p>Display the number of time a song played before and your guess rate on it in the song info window</p>
             <p><a href="https://github.com/Minigamer42/scripts/raw/master/src/amq%20song%20history%20(with%20localStorage).user.js" target="_blank">Click this link</a> to update it.</p>`
