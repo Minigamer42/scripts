@@ -104,7 +104,7 @@ function setup() {
             isCorrect = quiz.isSpectator ? false : data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId)?.correct;
         }
         current.correctCount += isCorrect;
-        current.spectatorCount += quiz.isSpectator;
+        current.spectatorCount += quiz.isSpectator ? 1 : 0;
         localStorage.setItem('songHistory', JSON.stringify({
             ...songHistory,
             [webm]: {
