@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
-// @version      1.6
+// @version      1.7
 // @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -12,7 +12,7 @@
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // ==/UserScript==
 
-const version = "1.6";
+const version = "1.7";
 const infoDiv = document.createElement('div');
 infoDiv.className = "rowPlayCount";
 infoDiv.style.marginBottom = "10px";
