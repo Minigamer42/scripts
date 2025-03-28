@@ -97,14 +97,17 @@ function setup() {
         const songHistory = JSON.parse(localStorage.getItem('songHistory'));
         const current = songHistory[webm] ?? {count: 0, correctCount: 0.0, spectatorCount: 0, lastPlayed: 0};
         current.count++;
+        let isSpectator;
         let isCorrect;
         if (quiz.gameMode === "Nexus") {
             isCorrect = data.players[0]?.correct;
         } else {
-            isCorrect = quiz.isSpectator ? false : !!data.players[quiz.ownGamePlayerId]?.correct;
+            const playerData = data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId);
+            isSpectator = !playerData
+            isCorrect = !!playerData?.correct;
         }
         current.correctCount += isCorrect ? 1 : 0;
-        current.spectatorCount += quiz.isSpectator ? 1 : 0;
+        current.spectatorCount += isSpectator ? 1 : 0;
         localStorage.setItem('songHistory', JSON.stringify({
             ...songHistory,
             [webm]: {
