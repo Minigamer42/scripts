@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         amq song history (with localStorage)
 // @namespace    http://tampermonkey.net/
-// @version      1.6
+// @version      1.7
 // @description  Display Song history in the song info box, including the guess rate and time since last time the song played.
 // @author       Minigamer42
 // @match        https://animemusicquiz.com/*
@@ -12,7 +12,7 @@
 // @require      https://github.com/Minigamer42/scripts/raw/master/lib/commands.js
 // ==/UserScript==
 
-const version = "1.6";
+const version = "1.7";
 const infoDiv = document.createElement('div');
 infoDiv.className = "rowPlayCount";
 infoDiv.style.marginBottom = "10px";
@@ -97,14 +97,17 @@ function setup() {
         const songHistory = JSON.parse(localStorage.getItem('songHistory'));
         const current = songHistory[webm] ?? {count: 0, correctCount: 0.0, spectatorCount: 0, lastPlayed: 0};
         current.count++;
+        let isSpectator;
         let isCorrect;
         if (quiz.gameMode === "Nexus") {
             isCorrect = data.players[0]?.correct;
         } else {
-            isCorrect = quiz.isSpectator ? false : data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId)?.correct;
+            const playerData = data.players.find(player => player.gamePlayerId === quiz.ownGamePlayerId);
+            isSpectator = !playerData
+            isCorrect = !!playerData?.correct;
         }
-        current.correctCount += isCorrect;
-        current.spectatorCount += quiz.isSpectator;
+        current.correctCount += isCorrect ? 1 : 0;
+        current.spectatorCount += isSpectator ? 1 : 0;
         localStorage.setItem('songHistory', JSON.stringify({
             ...songHistory,
             [webm]: {
